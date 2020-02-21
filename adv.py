@@ -12,11 +12,11 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
+# map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -58,14 +58,14 @@ def bfs(starting_room_id):
         visited.add(current_room)
     # For each direction in the map's current_room.
         for direction in mapDictionary[current_room]:
-    # Check if the current_room's direction is equal to '?'.
-            if mapDictionary[current_room][direction] == '?':
+    # Check if the current_room's direction is '?'.
+            if mapDictionary[current_room][direction] is '?':
                 
                 # Return path
                 return path
             
             #Else if the current_room's direction has not been visited.
-            elif mapDictionary[current_room][direction] not in visited:
+            if mapDictionary[current_room][direction] not in visited:
             # Create a new path to append(add) the direction.
                 new_path = list(path)
                 new_path.append(mapDictionary[current_room][direction])
@@ -78,7 +78,7 @@ def search(starting_room):
     opp_directions = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 
     # Create a counter of rooms that the player has been to.
-    vistedRoomId = 0
+    counting_rms = 0
 
     # While the length of the mapDictionary is not equal to the length of the room_graph.
     while len(mapDictionary) != len(room_graph):
@@ -101,13 +101,13 @@ def search(starting_room):
                 # prevRoom is equal to the opposite directions of the last travel path.
                 prevRoom = opp_directions[traversal_path[-1]]
                 # Add the prevRoom to the room_dict and add it to the counter.
-                room_dict[prevRoom] = vistedRoomId
+                room_dict[prevRoom] = counting_rms
             # Make the room_id of the mapDictionary to equal to the room_dict.
             mapDictionary[room_id] = room_dict
         
-        # Else room_id is equal to the room_id of the mapDictionary.
+        # Else room_dict is equal to the room_id of the mapDictionary.
         else:
-            room_id = mapDictionary[room_id]    
+            room_dict = mapDictionary[room_id]    
 
         # We see there is an unexplored '?'
         # Need to see if a room is connected or not
@@ -116,8 +116,8 @@ def search(starting_room):
 
         # Repeat through the room dictionary
         for direction in room_dict:
-            # If the direction of the room_dict is equal to '?':
-            if room_dict[direction] == '?':
+            # If the direction of the room_dict is '?':
+            if room_dict[direction] is '?':
                 # Add(append) the direction to the possible_exits.
                 possible_exits.append(direction)
                 
